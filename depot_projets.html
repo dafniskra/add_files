@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plateforme de Dépôt de Projets</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .file-drop-area {
+            border: 2px dashed #667eea;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background-color: #f8f9ff;
+        }
+
+        .file-drop-area:hover {
+            background-color: #f0f2ff;
+            border-color: #764ba2;
+        }
+
+        .file-drop-area.dragover {
+            background-color: #e8ebff;
+            border-color: #764ba2;
+            transform: scale(1.02);
+        }
+
+        .file-drop-area input[type="file"] {
+            display: none;
+        }
+
+        .drop-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .drop-text {
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .drop-hint {
+            color: #999;
+            font-size: 12px;
+        }
+
+        .file-info {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #f0f2ff;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .file-info.show {
+            display: block;
+        }
+
+        .file-name {
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .file-size {
+            color: #999;
+            font-size: 12px;
+        }
+
+        .file-check {
+            color: #4caf50;
+            font-weight: 600;
+            margin-left: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            display: none;
+            font-weight: 600;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .requirements {
+            background-color: #f9f9f9;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 3px;
+            font-size: 13px;
+            color: #555;
+        }
+
+        .requirements h3 {
+            color: #667eea;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .requirements ul {
+            margin-left: 20px;
+        }
+
+        .requirements li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 Plateforme de Dépôt de Projets</h1>
+        <p class="subtitle">Déposez votre projet en format ZIP</p>
+
+        <form id="uploadForm">
+            <div class="form-group">
+                <label for="nom">Nom et Prénom *</label>
+                <input type="text" id="nom" name="nom" required placeholder="Entrez votre nom complet">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email *</label>
+                <input type="email" id="email" name="email" required placeholder="votre.email@exemple.com">
+            </div>
+
+            <div class="form-group">
+                <label for="matiere">Matière/Cours *</label>
+                <select id="matiere" name="matiere" required>
+                    <option value="">-- Sélectionnez une matière --</option>
+                    <option value="Programmation">Programmation</option>
+                    <option value="Web">Développement Web</option>
+                    <option value="Mobile">Développement Mobile</option>
+                    <option value="Data">Data Science</option>
+                    <option value="Autre">Autre</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Fichier du Projet *</label>
+                <div class="file-drop-area" id="dropArea">
+                    <div class="drop-icon">📁</div>
+                    <div class="drop-text">Glissez-déposez votre fichier ZIP ici</div>
+                    <div class="drop-hint">ou cliquez pour parcourir</div>
+                    <input type="file" id="fileInput" name="file" accept=".zip" required>
+                </div>
+                <div class="file-info" id="fileInfo">
+                    <div class="file-name">
+                        <span id="fileName"></span>
+                        <span class="file-check">✓</span>
+                    </div>
+                    <div class="file-size">
+                        Taille: <span id="fileSize"></span>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" id="submitBtn">Déposer le Projet</button>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p style="margin-top: 10px; color: #667eea;">Envoi en cours...</p>
+            </div>
+
+            <div class="message" id="message"></div>
+        </form>
+
+        <div class="requirements">
+            <h3>✓ Conditions du dépôt</h3>
+            <ul>
+                <li>Format accepté: <strong>.ZIP</strong> uniquement</li>
+                <li>Taille maximale: <strong>50 MB</strong></li>
+                <li>Tous les champs sont obligatoires</li>
+                <li>Assurez-vous que votre ZIP contient tous les fichiers du projet</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const dropArea = document.getElementById('dropArea');
+        const fileInput = document.getElementById('fileInput');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+        const fileSize = document.getElementById('fileSize');
+        const form = document.getElementById('uploadForm');
+        const message = document.getElementById('message');
+        const loading = document.getElementById('loading');
+        const submitBtn = document.getElementById('submitBtn');
+
+        const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50 MB
+
+        // Événements de drag and drop
+        dropArea.addEventListener('click', () => fileInput.click());
+
+        dropArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropArea.classList.add('dragover');
+        });
+
+        dropArea.addEventListener('dragleave', () => {
+            dropArea.classList.remove('dragover');
+        });
+
+        dropArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropArea.classList.remove('dragover');
+
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFile(files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        function handleFile(file) {
+            // Vérifier le type de fichier
+            if (!file.name.endsWith('.zip')) {
+                showMessage('Erreur: Seuls les fichiers ZIP sont acceptés.', 'error');
+                fileInput.value = '';
+                fileInfo.classList.remove('show');
+                return;
+            }
+
+            // Vérifier la taille
+            if (file.size > MAX_FILE_SIZE) {
+                showMessage('Erreur: Le fichier dépasse 50 MB.', 'error');
+                fileInput.value = '';
+                fileInfo.classList.remove('show');
+                return;
+            }
+
+            // Afficher les infos du fichier
+            fileName.textContent = file.name;
+            fileSize.textContent = (file.size / 1024 / 1024).toFixed(2) + ' MB';
+            fileInfo.classList.add('show');
+            message.classList.remove('show');
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Vérifier que tous les champs sont remplis
+            if (!fileInput.files.length) {
+                showMessage('Veuillez sélectionner un fichier ZIP.', 'error');
+                return;
+            }
+
+            const nom = document.getElementById('nom').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const matiere = document.getElementById('matiere').value;
+
+            if (!nom || !email || !matiere) {
+                showMessage('Veuillez remplir tous les champs.', 'error');
+                return;
+            }
+
+            // Préparer les données
+            const formData = new FormData();
+            formData.append('nom', nom);
+            formData.append('email', email);
+            formData.append('matiere', matiere);
+            formData.append('file', fileInput.files[0]);
+            formData.append('timestamp', new Date().toISOString());
+
+            // Afficher le chargement
+            loading.classList.add('show');
+            submitBtn.disabled = true;
+
+            try {
+                // Simuler l'envoi (en production, vous l'enverriez à votre serveur)
+                const response = await sendToServer(formData);
+
+                if (response.success) {
+                    showMessage('✓ Votre projet a été déposé avec succès! Merci.', 'success');
+                    form.reset();
+                    fileInfo.classList.remove('show');
+
+                    // Réinitialiser après 3 secondes
+                    setTimeout(() => {
+                        location.reload();
+                    }, 3000);
+                } else {
+                    showMessage('Erreur: ' + response.message, 'error');
+                }
+            } catch (error) {
+                showMessage('Erreur lors de l\'envoi. Veuillez réessayer.', 'error');
+                console.error('Erreur:', error);
+            } finally {
+                loading.classList.remove('show');
+                submitBtn.disabled = false;
+            }
+        });
+
+        async function sendToServer(formData) {
+            // Cette fonction envoie les données à votre serveur
+            // Pour tester, vous pouvez créer un serveur Node.js/Express
+            
+            // Exemple avec un serveur backend:
+            // const response = await fetch('/api/upload', {
+            //     method: 'POST',
+            //     body: formData
+            // });
+            // return await response.json();
+
+            // Pour l'instant, simuler une réponse réussie
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve({ success: true });
+                }, 2000);
+            });
+        }
+
+        function showMessage(text, type) {
+            message.textContent = text;
+            message.className = `message show ${type}`;
+        }
+    </script>
+</body>
+</html>
