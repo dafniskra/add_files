@@ -8,7 +8,10 @@ const app = express();
 const PORT = 3000;
 
 // Créer les répertoires s'ils n'existent pas
-const uploadDir = path.join(__dirname, 'uploads');
+const uploadDir = '/var/data/uploads';
+if (!fs.existsSync(uploadDir)) {           
+    fs.mkdirSync(uploadDir, { recursive: true });
+}   
 const projectsDir = path.join(uploadDir, 'projets');
 
 if (!fs.existsSync(uploadDir)) {
